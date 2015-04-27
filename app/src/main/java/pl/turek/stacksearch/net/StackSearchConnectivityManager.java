@@ -8,7 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
+
+import de.greenrobot.event.EventBus;
+import pl.turek.stacksearch.net.event.NetworkAvailabilityChangedEvent;
 
 /**
  * @author Krzysztof Turek (2015-04-27).
@@ -54,10 +56,7 @@ public class StackSearchConnectivityManager {
                     connected = isNetworkAvailable();
                 }
 
-                Toast.makeText(mAppContext, "Network connection: " + connected, Toast.LENGTH_SHORT).show();
-
-                //TODO
-                // EventBuss
+                EventBus.getDefault().post(new NetworkAvailabilityChangedEvent(connected));
             }
         }
     };

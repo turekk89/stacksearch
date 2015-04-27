@@ -5,4 +5,7 @@
 
     <!-- Search activity -->
     <dimen name="search_activity_button_left_margin">8dp</dimen>
+
+    <!-- Others -->
+    <dimen name="blue_line_height">2dp</dimen>
 </resources>

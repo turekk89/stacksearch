@@ -1,12 +1,12 @@
 package pl.turek.stacksearch.search;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import pl.turek.stacksearch.R;
+import pl.turek.stacksearch.ui.BaseContentActivity;
 
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseContentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,8 +5,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import pl.turek.stacksearch.R;
 import pl.turek.stacksearch.ui.BaseFragment;
 
 /**
@@ -15,7 +17,6 @@ import pl.turek.stacksearch.ui.BaseFragment;
 public class SearchFragment extends BaseFragment {
 
     public SearchFragment() {
-
     }
 
     public static SearchFragment newInstance() {
@@ -25,8 +26,22 @@ public class SearchFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getActivity(), "TODO - search fragment implementation", Toast.LENGTH_SHORT).show();
+        final View root = inflater.inflate(R.layout.search_fragment, container, false);
+        ButterKnife.inject(this, root);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ButterKnife.reset(this);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.search_button)
+    void search() {
+        //TODO
     }
 }

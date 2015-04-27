@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="SearchQueryTextStyle">
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">StackSearch</string>
+    <!-- Search activity -->
+    <string name="search_activity_search_query_hint">Search on StackOverflow</string>
+    <string name="search_activity_search_button_text">Search</string>
 
+    <!-- Others -->
+    <string name="app_name">StackSearch</string>
     <string name="hello_world">Hello world!</string>
 </resources>

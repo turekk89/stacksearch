@@ -1,11 +1,16 @@
 package pl.turek.stacksearch.search;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -22,6 +27,8 @@ public class SearchFragment extends BaseFragment {
 
     @InjectView(R.id.search_button)
     Button mSearchButton;
+    @InjectView(R.id.search_query)
+    EditText mSearchQueryEditText;
 
     public SearchFragment() {
     }
@@ -63,11 +70,33 @@ public class SearchFragment extends BaseFragment {
     @SuppressWarnings("unused")
     @OnClick(R.id.search_button)
     void search() {
-        //TODO
+        if (TextUtils.isEmpty(getQuery())) {
+            showQueryError();
+        } else {
+            //TODO
+        }
     }
 
     @SuppressWarnings("unused")
     public void onEventMainThread(final NetworkAvailabilityChangedEvent event) {
         mSearchButton.setEnabled(event.isNetworkAvailable());
+    }
+
+    private String getQuery() {
+        return mSearchQueryEditText.getText().toString().trim();
+    }
+
+    private void showQueryError() {
+        final String errorMsg = getString(R.string.search_activity_search_query_error);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            // workaround (hack)
+            // https://code.google.com/p/android/issues/detail?id=22920 - bug
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(android.R.color.primary_text_light));
+            final SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(errorMsg);
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, errorMsg.length(), 0);
+            mSearchQueryEditText.setError(spannableStringBuilder);
+        } else {
+            mSearchQueryEditText.setError(errorMsg);
+        }
     }
 }

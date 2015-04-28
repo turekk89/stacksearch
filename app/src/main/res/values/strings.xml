@@ -1,6 +1,7 @@
 <resources>
     <!-- Search activity -->
     <string name="search_activity_search_query_hint">Search on StackOverflow</string>
+    <string name="search_activity_search_query_error">To pole nie może być puste</string>
     <string name="search_activity_search_button_text">Search</string>
 
     <!-- Others -->

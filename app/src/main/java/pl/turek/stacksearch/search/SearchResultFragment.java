@@ -1,25 +1,29 @@
 package pl.turek.stacksearch.search;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.turek.stacksearch.R;
+import pl.turek.stacksearch.search.client.response.Question;
 import pl.turek.stacksearch.search.client.response.SearchResponse;
 import pl.turek.stacksearch.ui.BaseFragment;
 
 /**
  * @author Krzysztof Turek (2015-04-29).
  */
-public class SearchResultFragment extends BaseFragment {
+public class SearchResultFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private static final String KEY_SEARCH_RESULT_SWITCHER_MODE = "key_search_result_switcher_mode";
 
@@ -64,6 +68,7 @@ public class SearchResultFragment extends BaseFragment {
         final Activity activity = getActivity();
         mSearchResultListAdapter = new SearchResultListAdapter(activity);
         mSearchResultListView.setAdapter(mSearchResultListAdapter);
+        mSearchResultListView.setOnItemClickListener(this);
 
         mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(activity);
         mSearchTaskRetainedFragment.attach(this);
@@ -113,6 +118,18 @@ public class SearchResultFragment extends BaseFragment {
                 mSearchResultListAdapter.setQuestions(searchResponse.getQuestions());
                 mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
             }
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Question question = (Question) parent.getItemAtPosition(position);
+        final String detailsLink = question.getDetailsLink();
+        if (!TextUtils.isEmpty(detailsLink)) {
+            final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(detailsLink));
+            startActivity(browserIntent);
+        } else {
+            Toast.makeText(getActivity(), R.string.search_result_list_details_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

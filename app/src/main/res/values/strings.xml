@@ -1,8 +1,13 @@
 <resources>
     <!-- Search activity -->
     <string name="search_activity_search_query_hint">Search on StackOverflow</string>
-    <string name="search_activity_search_query_error">To pole nie może być puste</string>
+    <string name="search_activity_search_query_error">This field can not be empty</string>
     <string name="search_activity_search_button_text">Search</string>
+    <string name="search_activity_search_in_progress">Searching…</string>
+    <string name="search_activity_no_results">No results</string>
+
+    <!-- SearchResult list -->
+    <string name="search_result_list_avatar_content_description">Avatar</string>
 
     <!-- Others -->
     <string name="app_name">StackSearch</string>

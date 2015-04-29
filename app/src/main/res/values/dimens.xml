@@ -3,6 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Material Design guidelines. -->
+    <dimen name="material_list_vertical_padding">8dp</dimen>
+    <dimen name="material_list_item_avatar_size">40dp</dimen>
+    <dimen name="material_list_item_text_padding_left">56dp</dimen>
+    //material value - activity_vertical_margin
+
     <!-- Search activity -->
     <dimen name="search_activity_button_left_margin">8dp</dimen>
 

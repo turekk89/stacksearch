@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pl.turek.stacksearch.search.SearchResultListItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    tools:ignore="RtlHardcoded">
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/material_list_item_avatar_size"
+        android:layout_height="@dimen/material_list_item_avatar_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/search_result_list_avatar_content_description"
+        tools:src="@drawable/ic_default_avatar" />
+
+    <TextView
+        android:id="@+id/showName"
+        style="@style/SearchResultListItemShowNameStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/avatar"
+        android:layout_marginLeft="@dimen/material_list_item_text_padding_left"
+        android:layout_toLeftOf="@+id/answers"
+        tools:text="Michael Jones" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/showName"
+        android:layout_marginLeft="@dimen/material_list_item_text_padding_left"
+        tools:text="Android is the best!" />
+
+    <TextView
+        android:id="@+id/answers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/showName"
+        tools:text="Answers: 4" />
+
+</pl.turek.stacksearch.search.SearchResultListItemView>

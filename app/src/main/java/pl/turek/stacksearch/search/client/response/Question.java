@@ -8,6 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public class Question {
 
     @SuppressWarnings("unused")
+    @SerializedName("question_id")
+    private long mId;
+
+    @SuppressWarnings("unused")
     @SerializedName("title")
     private String mTitle;
 
@@ -22,6 +26,10 @@ public class Question {
     @SuppressWarnings("unused")
     @SerializedName("owner")
     private Owner mOwner;
+
+    public long getId() {
+        return mId;
+    }
 
     public String getTitle() {
         return mTitle;

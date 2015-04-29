@@ -75,10 +75,11 @@ public class SearchFragment extends BaseFragment {
     @SuppressWarnings("unused")
     @OnClick(R.id.search_button)
     void search() {
-        if (TextUtils.isEmpty(getQuery())) {
+        final String searchPhrase = getSearchPhrase();
+        if (TextUtils.isEmpty(searchPhrase)) {
             showQueryError();
         } else {
-            showSearchResult();
+            showSearchResult(searchPhrase);
         }
     }
 
@@ -87,7 +88,7 @@ public class SearchFragment extends BaseFragment {
         mSearchButton.setEnabled(event.isNetworkAvailable());
     }
 
-    private String getQuery() {
+    private String getSearchPhrase() {
         return mSearchQueryEditText.getText().toString().trim();
     }
 
@@ -105,11 +106,12 @@ public class SearchFragment extends BaseFragment {
         }
     }
 
-    private void showSearchResult() {
+    private void showSearchResult(final String searchPhrase) {
         final SearchActivity searchActivity = (SearchActivity) getActivity();
         UIUtils.hideSoftKeyboard(searchActivity);
+
         final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(searchActivity.getFragmentContainerId(), SearchResultFragment.newInstance());
+        fragmentTransaction.replace(searchActivity.getFragmentContainerId(), SearchResultFragment.newInstance(searchPhrase));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();

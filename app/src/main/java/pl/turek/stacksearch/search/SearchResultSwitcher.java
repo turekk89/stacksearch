@@ -28,4 +28,28 @@ public class SearchResultSwitcher extends ViewAnimator {
     public void setMode(@ViewMode final int mode) {
         setDisplayedChild(mode);
     }
+
+    @ViewMode
+    public int getMode() {
+        switch (getDisplayedChild()) {
+            case 0:
+                return MODE_PROGRESS;
+            case 1:
+                return MODE_RESULT;
+            default:
+                throw new IllegalStateException("Unknown view mode");
+        }
+    }
+
+    @ViewMode
+    public static int getMode(final int value) {
+        switch (value) {
+            case 0:
+                return MODE_PROGRESS;
+            case 1:
+                return MODE_RESULT;
+            default:
+                throw new IllegalArgumentException("Unknown view mode");
+        }
+    }
 }

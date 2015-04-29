@@ -24,8 +24,9 @@ public abstract class BaseContentActivity extends BaseFragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_content_activity);
-
         ButterKnife.inject(this);
+
+        onBeforeFragmentCreate(savedInstanceState);
 
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -38,5 +39,9 @@ public abstract class BaseContentActivity extends BaseFragmentActivity {
     @Override
     public int getFragmentContainerId() {
         return FRAGMENT_CONTAINER_ID;
+    }
+
+    protected void onBeforeFragmentCreate(@SuppressWarnings("unused") @Nullable Bundle saveInstanceState) {
+
     }
 }

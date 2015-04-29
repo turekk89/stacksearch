@@ -19,6 +19,13 @@ public class SearchResultFragment extends BaseFragment {
     @InjectView(R.id.search_result_switcher)
     SearchResultSwitcher mSearchResultSwitcher;
 
+    public SearchResultFragment() {
+    }
+
+    public static SearchResultFragment newInstance() {
+        return new SearchResultFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

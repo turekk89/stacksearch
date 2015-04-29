@@ -3,6 +3,7 @@ package pl.turek.stacksearch.search;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -19,6 +20,7 @@ import de.greenrobot.event.EventBus;
 import pl.turek.stacksearch.R;
 import pl.turek.stacksearch.net.event.NetworkAvailabilityChangedEvent;
 import pl.turek.stacksearch.ui.BaseFragment;
+import pl.turek.stacksearch.util.UIUtils;
 
 /**
  * @author Krzysztof Turek (2015-04-27).
@@ -49,6 +51,9 @@ public class SearchFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (mSearchQueryEditText.hasFocus()) {
+            UIUtils.showSoftKeyboard(getActivity(), mSearchQueryEditText);
+        }
 
         EventBus.getDefault().register(this);
     }
@@ -73,7 +78,7 @@ public class SearchFragment extends BaseFragment {
         if (TextUtils.isEmpty(getQuery())) {
             showQueryError();
         } else {
-            //TODO
+            showSearchResult();
         }
     }
 
@@ -98,5 +103,15 @@ public class SearchFragment extends BaseFragment {
         } else {
             mSearchQueryEditText.setError(errorMsg);
         }
+    }
+
+    private void showSearchResult() {
+        final SearchActivity searchActivity = (SearchActivity) getActivity();
+        UIUtils.hideSoftKeyboard(searchActivity);
+        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(searchActivity.getFragmentContainerId(), SearchResultFragment.newInstance());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 }

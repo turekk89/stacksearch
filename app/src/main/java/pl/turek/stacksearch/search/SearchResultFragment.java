@@ -1,14 +1,19 @@
 package pl.turek.stacksearch.search;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.turek.stacksearch.R;
+import pl.turek.stacksearch.search.client.response.SearchResponse;
 import pl.turek.stacksearch.ui.BaseFragment;
 
 /**
@@ -20,9 +25,12 @@ public class SearchResultFragment extends BaseFragment {
 
     private SearchTaskRetainedFragment mSearchTaskRetainedFragment;
     private String mSearchPhrase;
+    private SearchResultListAdapter mSearchResultListAdapter;
 
     @InjectView(R.id.search_result_switcher)
     SearchResultSwitcher mSearchResultSwitcher;
+    @InjectView(R.id.search_result_list)
+    ListView mSearchResultListView;
 
     public SearchResultFragment() {
     }
@@ -53,15 +61,27 @@ public class SearchResultFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(getActivity());
+        final Activity activity = getActivity();
+        mSearchResultListAdapter = new SearchResultListAdapter(activity);
+        mSearchResultListView.setAdapter(mSearchResultListAdapter);
+
+        mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(activity);
         mSearchTaskRetainedFragment.attach(this);
 
         final Bundle args = getArguments();
         mSearchPhrase = args.getString(SearchActivity.EXTRA_SEARCH_PHRASE);
 
-        if (savedInstanceState == null) {
+        if (isSearchNeeded()) {
             mSearchTaskRetainedFragment.search(mSearchPhrase);
+        } else {
+            showResult(mSearchTaskRetainedFragment.getSearchResponse());
         }
+    }
+
+    private boolean isSearchNeeded() {
+        final String lastSearchedPhrase = mSearchTaskRetainedFragment.getLastSearchedPhrase();
+        return TextUtils.isEmpty(lastSearchedPhrase) || !mSearchPhrase.
+                equalsIgnoreCase(lastSearchedPhrase);
     }
 
     @Override
@@ -82,8 +102,17 @@ public class SearchResultFragment extends BaseFragment {
         mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_PROGRESS);
     }
 
-    public void showResult() {
-        mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
+    public void showResult(final SearchResponse searchResponse) {
+        if (searchResponse != null) {
+            final int errorId = searchResponse.getErrorId();
+            if (errorId != 0) {
+                Toast.makeText(getActivity(), errorId + ", " + searchResponse.getErrorName(), Toast.LENGTH_SHORT)
+                        .show();
+                //TODO error dialog
+            } else {
+                mSearchResultListAdapter.setQuestions(searchResponse.getQuestions());
+                mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
+            }
+        }
     }
-
 }

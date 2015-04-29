@@ -8,6 +8,7 @@
 
     <!-- SearchResult list -->
     <string name="search_result_list_avatar_content_description">Avatar</string>
+    <string name="search_result_list_answer_count">Answers: %d</string>
 
     <!-- Others -->
     <string name="app_name">StackSearch</string>

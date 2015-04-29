@@ -7,7 +7,7 @@
     <dimen name="material_list_vertical_padding">8dp</dimen>
     <dimen name="material_list_item_avatar_size">40dp</dimen>
     <dimen name="material_list_item_text_padding_left">56dp</dimen>
-    //material value - activity_vertical_margin
+    <dimen name="material_list_item_text_vertical_padding">20dp</dimen>
 
     <!-- Search activity -->
     <dimen name="search_activity_button_left_margin">8dp</dimen>

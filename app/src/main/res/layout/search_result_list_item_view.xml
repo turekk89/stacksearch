@@ -2,7 +2,11 @@
 <pl.turek.stacksearch.search.SearchResultListItemView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/material_list_item_text_vertical_padding"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/material_list_item_text_vertical_padding"
     tools:ignore="RtlHardcoded">
 
     <ImageView
@@ -10,7 +14,7 @@
         android:layout_width="@dimen/material_list_item_avatar_size"
         android:layout_height="@dimen/material_list_item_avatar_size"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/showName"
         android:contentDescription="@string/search_result_list_avatar_content_description"
         tools:src="@drawable/ic_default_avatar" />
 
@@ -20,14 +24,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@id/avatar"
         android:layout_marginLeft="@dimen/material_list_item_text_padding_left"
         android:layout_toLeftOf="@+id/answers"
         tools:text="Michael Jones" />
 
     <TextView
         android:id="@+id/title"
-        style="@style/TextAppearance.AppCompat.Body1"
+        style="@style/SearchResultListItemTitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/showName"

@@ -13,5 +13,5 @@
 
     <!-- Others -->
     <string name="app_name">StackSearch</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="no_internet_connection">No Internet connection</string>
 </resources>

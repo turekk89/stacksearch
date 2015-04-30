@@ -27,6 +27,9 @@ import pl.turek.stacksearch.util.UIUtils;
  */
 public class SearchFragment extends BaseFragment {
 
+    private static final String KEY_SEARCH_BUTTON_ENABLED = "key_search_button_enabled";
+    private static final String KEY_SEARCH_QUERY_ENABLED = "key_search_query_enabled";
+
     @InjectView(R.id.search_button)
     Button mSearchButton;
     @InjectView(R.id.search_query)
@@ -44,6 +47,11 @@ public class SearchFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.inject(this, root);
+
+        if (savedInstanceState != null) {
+            mSearchButton.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_BUTTON_ENABLED));
+            mSearchQueryEditText.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_QUERY_ENABLED));
+        }
 
         return root;
     }
@@ -88,9 +96,19 @@ public class SearchFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(KEY_SEARCH_BUTTON_ENABLED, mSearchButton.isEnabled());
+        outState.putBoolean(KEY_SEARCH_QUERY_ENABLED, mSearchQueryEditText.isEnabled());
+    }
+
     @SuppressWarnings("unused")
     public void onEventMainThread(final NetworkAvailabilityChangedEvent event) {
-        mSearchButton.setEnabled(event.isNetworkAvailable());
+        final boolean enable = event.isNetworkAvailable();
+        mSearchButton.setEnabled(enable);
+        mSearchQueryEditText.setEnabled(enable);
     }
 
     private String getSearchPhrase() {
@@ -104,7 +122,7 @@ public class SearchFragment extends BaseFragment {
             // https://code.google.com/p/android/issues/detail?id=22920 - bug
             // I see this first time in my life :D but I use emulator, I don't have mobile with
             // android 2.3.7 so I can't test it with real device
-            
+
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(android.R.color.primary_text_light));
             final SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(errorMsg);
             spannableStringBuilder.setSpan(foregroundColorSpan, 0, errorMsg.length(), 0);

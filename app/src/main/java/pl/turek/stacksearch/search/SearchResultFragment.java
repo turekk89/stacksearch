@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -35,6 +36,8 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     SearchResultSwitcher mSearchResultSwitcher;
     @InjectView(R.id.search_result_list)
     ListView mSearchResultListView;
+    @InjectView(R.id.empty_view)
+    TextView mEmptyView;
 
     public SearchResultFragment() {
     }
@@ -68,6 +71,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         final Activity activity = getActivity();
         mSearchResultListAdapter = new SearchResultListAdapter(activity);
         mSearchResultListView.setAdapter(mSearchResultListAdapter);
+        mSearchResultListView.setEmptyView(mEmptyView);
         mSearchResultListView.setOnItemClickListener(this);
 
         mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(activity);

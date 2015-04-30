@@ -76,17 +76,11 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         final Bundle args = getArguments();
         mSearchPhrase = args.getString(SearchActivity.EXTRA_SEARCH_PHRASE);
 
-        if (isSearchNeeded()) {
+        if (savedInstanceState == null) {
             mSearchTaskRetainedFragment.search(mSearchPhrase);
         } else {
             showResult(mSearchTaskRetainedFragment.getSearchResponse());
         }
-    }
-
-    private boolean isSearchNeeded() {
-        final String lastSearchedPhrase = mSearchTaskRetainedFragment.getLastSearchedPhrase();
-        return TextUtils.isEmpty(lastSearchedPhrase) || !mSearchPhrase.
-                equalsIgnoreCase(lastSearchedPhrase);
     }
 
     @Override

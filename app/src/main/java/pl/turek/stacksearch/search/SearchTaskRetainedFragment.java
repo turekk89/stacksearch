@@ -21,7 +21,6 @@ public class SearchTaskRetainedFragment extends BaseFragment {
     private SearchAsyncTask mSearchAsyncTask;
     private WeakReference<SearchResultFragment> mSearchResultFragmentWeakReference;
     private SearchResponse mSearchResponse;
-    private String mLastSearchedPhrase;
 
     public SearchTaskRetainedFragment() {
         setRetainInstance(true);
@@ -42,7 +41,6 @@ public class SearchTaskRetainedFragment extends BaseFragment {
 
     public void search(final String searchPhrase) {
         if (mSearchAsyncTask == null || AsyncTask.Status.FINISHED == mSearchAsyncTask.getStatus()) {
-            mLastSearchedPhrase = searchPhrase;
             mSearchAsyncTask = new SearchAsyncTask();
             mSearchAsyncTask.execute(searchPhrase);
         }
@@ -50,10 +48,6 @@ public class SearchTaskRetainedFragment extends BaseFragment {
 
     public SearchResponse getSearchResponse() {
         return mSearchResponse;
-    }
-
-    public String getLastSearchedPhrase() {
-        return mLastSearchedPhrase;
     }
 
     final class SearchAsyncTask extends AsyncTask<String, Void, SearchResponse> {

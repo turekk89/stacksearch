@@ -51,11 +51,15 @@ public class SearchFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (mSearchQueryEditText.hasFocus()) {
-            UIUtils.showSoftKeyboard(getActivity(), mSearchQueryEditText);
-        }
 
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        UIUtils.showSoftKeyboard(getActivity());
     }
 
     @Override
@@ -75,6 +79,7 @@ public class SearchFragment extends BaseFragment {
     @SuppressWarnings("unused")
     @OnClick(R.id.search_button)
     void search() {
+        UIUtils.hideSoftKeyboard(getActivity());
         final String searchPhrase = getSearchPhrase();
         if (TextUtils.isEmpty(searchPhrase)) {
             showQueryError();
@@ -108,8 +113,6 @@ public class SearchFragment extends BaseFragment {
 
     private void showSearchResult(final String searchPhrase) {
         final SearchActivity searchActivity = (SearchActivity) getActivity();
-        UIUtils.hideSoftKeyboard(searchActivity);
-
         final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(searchActivity.getFragmentContainerId(), SearchResultFragment.newInstance(searchPhrase));
         fragmentTransaction.addToBackStack(null);

@@ -39,9 +39,9 @@ public class SearchTaskRetainedFragment extends BaseFragment {
         mSearchResultFragmentWeakReference = new WeakReference<>(fragment);
     }
 
-    public void search(final String searchPhrase) {
+    public void search(final String searchPhrase, final boolean refresh) {
         if (mSearchAsyncTask == null || AsyncTask.Status.FINISHED == mSearchAsyncTask.getStatus()) {
-            mSearchAsyncTask = new SearchAsyncTask();
+            mSearchAsyncTask = new SearchAsyncTask(refresh);
             mSearchAsyncTask.execute(searchPhrase);
         }
     }
@@ -52,10 +52,16 @@ public class SearchTaskRetainedFragment extends BaseFragment {
 
     final class SearchAsyncTask extends AsyncTask<String, Void, SearchResponse> {
 
+        final boolean mRefresh;
+
+        public SearchAsyncTask(final boolean refresh) {
+            mRefresh = refresh;
+        }
+
         @Override
         protected void onPreExecute() {
             final SearchResultFragment fragment = mSearchResultFragmentWeakReference.get();
-            if (fragment != null && fragment.isAdded()) {
+            if (fragment != null && fragment.isAdded() && !mRefresh) {
                 fragment.showProgress();
             }
         }

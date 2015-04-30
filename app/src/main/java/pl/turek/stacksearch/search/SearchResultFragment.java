@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,8 @@ import pl.turek.stacksearch.ui.BaseFragment;
 /**
  * @author Krzysztof Turek (2015-04-29).
  */
-public class SearchResultFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class SearchResultFragment extends BaseFragment implements AdapterView.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String KEY_SEARCH_RESULT_SWITCHER_MODE = "key_search_result_switcher_mode";
 
@@ -38,6 +40,8 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     ListView mSearchResultListView;
     @InjectView(R.id.empty_view)
     TextView mEmptyView;
+    @InjectView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     public SearchResultFragment() {
     }
@@ -61,6 +65,9 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
             mSearchResultSwitcher.setMode(SearchResultSwitcher.getMode(modeInt));
         }
 
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorMaterialBlue, R.color.colorMaterialGreen,
+                R.color.colorMaterialOrange);
+
         return root;
     }
 
@@ -74,6 +81,8 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         mSearchResultListView.setEmptyView(mEmptyView);
         mSearchResultListView.setOnItemClickListener(this);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(activity);
         mSearchTaskRetainedFragment.attach(this);
 
@@ -81,7 +90,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         mSearchPhrase = args.getString(SearchActivity.EXTRA_SEARCH_PHRASE);
 
         if (savedInstanceState == null) {
-            mSearchTaskRetainedFragment.search(mSearchPhrase);
+            mSearchTaskRetainedFragment.search(mSearchPhrase, false);
         } else {
             showResult(mSearchTaskRetainedFragment.getSearchResponse());
         }
@@ -106,6 +115,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     }
 
     public void showResult(final SearchResponse searchResponse) {
+        mSwipeRefreshLayout.setRefreshing(false);
         if (searchResponse != null) {
             final int errorId = searchResponse.getErrorId();
             if (errorId != 0) {
@@ -129,5 +139,10 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         } else {
             Toast.makeText(getActivity(), R.string.search_result_list_details_error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        mSearchTaskRetainedFragment.search(mSearchPhrase, true);
     }
 }

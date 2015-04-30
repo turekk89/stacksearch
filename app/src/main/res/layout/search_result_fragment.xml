@@ -11,16 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/search_result_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:footerDividersEnabled="false"
-            android:paddingBottom="@dimen/material_list_vertical_padding"
-            android:paddingTop="@dimen/material_list_vertical_padding"
-            android:scrollbarStyle="outsideOverlay"
-            tools:listitem="@layout/search_result_list_item_view" />
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/search_result_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:footerDividersEnabled="false"
+                android:paddingBottom="@dimen/material_list_vertical_padding"
+                android:paddingTop="@dimen/material_list_vertical_padding"
+                android:scrollbarStyle="outsideOverlay"
+                tools:listitem="@layout/search_result_list_item_view" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <TextView
             android:id="@+id/empty_view"
@@ -30,7 +37,6 @@
             android:layout_gravity="center"
             android:text="@string/search_activity_no_results"
             android:visibility="gone" />
-
     </FrameLayout>
 
 </pl.turek.stacksearch.search.SearchResultSwitcher>

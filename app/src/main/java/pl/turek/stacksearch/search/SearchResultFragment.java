@@ -117,16 +117,18 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     public void showResult(final SearchResponse searchResponse) {
         mSwipeRefreshLayout.setRefreshing(false);
         if (searchResponse != null) {
+            mSearchResultListAdapter.setQuestions(searchResponse.getQuestions());
+            mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
             final int errorId = searchResponse.getErrorId();
             if (errorId != 0) {
-                Toast.makeText(getActivity(), errorId + ", " + searchResponse.getErrorName(), Toast.LENGTH_SHORT)
-                        .show();
-                //TODO error dialog
-            } else {
-                mSearchResultListAdapter.setQuestions(searchResponse.getQuestions());
-                mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
+                showSimplyErrorDialog(errorId, searchResponse.getErrorMessage(), searchResponse.getErrorName());
             }
         }
+    }
+
+    private void showSimplyErrorDialog(final int errorId, final String errorMsg, final String errorName) {
+        final SimplyErrorDialog dialog = SimplyErrorDialog.newInstance(errorId, errorMsg, errorName);
+        dialog.show(getFragmentManager(), dialog.getCustomTag());
     }
 
     @Override

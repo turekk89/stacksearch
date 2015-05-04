@@ -1,5 +1,6 @@
 package pl.turek.stacksearch.search;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -49,11 +51,17 @@ public class SearchFragment extends BaseFragment {
         ButterKnife.inject(this, root);
 
         if (savedInstanceState != null) {
-            mSearchButton.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_BUTTON_ENABLED));
-            mSearchQueryEditText.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_QUERY_ENABLED));
+            mSearchButton.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_BUTTON_ENABLED, true));
+            mSearchQueryEditText.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_QUERY_ENABLED, true));
         }
 
         return root;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override
@@ -67,7 +75,9 @@ public class SearchFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        UIUtils.showSoftKeyboard(getActivity());
+        if (mSearchQueryEditText.hasFocus()) {
+            UIUtils.showSoftKeyboard(getActivity(), mSearchQueryEditText);
+        }
     }
 
     @Override
@@ -100,8 +110,10 @@ public class SearchFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(KEY_SEARCH_BUTTON_ENABLED, mSearchButton.isEnabled());
-        outState.putBoolean(KEY_SEARCH_QUERY_ENABLED, mSearchQueryEditText.isEnabled());
+        if (isVisible()) {
+            outState.putBoolean(KEY_SEARCH_BUTTON_ENABLED, mSearchButton.isEnabled());
+            outState.putBoolean(KEY_SEARCH_QUERY_ENABLED, mSearchQueryEditText.isEnabled());
+        }
     }
 
     @SuppressWarnings("unused")
@@ -109,6 +121,9 @@ public class SearchFragment extends BaseFragment {
         final boolean enable = event.isNetworkAvailable();
         mSearchButton.setEnabled(enable);
         mSearchQueryEditText.setEnabled(enable);
+        if (enable) {
+            UIUtils.showSoftKeyboard(getActivity(), mSearchQueryEditText);
+        }
     }
 
     private String getSearchPhrase() {

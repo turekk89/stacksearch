@@ -1,6 +1,7 @@
 package pl.turek.stacksearch.search.client;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
@@ -46,7 +47,10 @@ public class SearchClient {
         return searchResult;
     }
 
-    private static String buildRequestUrl(final String searchPhrase) {
+    public static String buildRequestUrl(final String searchPhrase) {
+        if (TextUtils.isEmpty(searchPhrase)) {
+            throw new IllegalArgumentException("Search phrase can not be null");
+        }
         return String.format(SEARCH, getPrefixUrl(), getSuffixUrl(searchPhrase));
     }
 

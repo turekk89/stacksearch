@@ -23,7 +23,7 @@ public class SearchActivity extends BaseContentActivity {
     }
 
     @Override
-    protected void onBeforeFragmentCreate(@Nullable Bundle saveInstanceState) {
+    protected void onBeforeCreateFragment(@Nullable Bundle saveInstanceState) {
         if (saveInstanceState == null) {
             // Create retained fragment before normal one returned
             // from onCreateFragment() method

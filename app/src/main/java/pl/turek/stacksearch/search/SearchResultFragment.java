@@ -116,9 +116,9 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
 
     public void showResult(final SearchResponse searchResponse) {
         mSwipeRefreshLayout.setRefreshing(false);
+        mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
         if (searchResponse != null) {
             mSearchResultListAdapter.setQuestions(searchResponse.getQuestions());
-            mSearchResultSwitcher.setMode(SearchResultSwitcher.MODE_RESULT);
             final int errorId = searchResponse.getErrorId();
             if (errorId != 0) {
                 showSimplyErrorDialog(errorId, searchResponse.getErrorMessage(), searchResponse.getErrorName());

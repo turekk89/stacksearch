@@ -13,7 +13,6 @@ import com.squareup.picasso.RequestCreator;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.turek.stacksearch.R;
-import pl.turek.stacksearch.search.client.response.Question;
 
 /**
  * @author Krzysztof Turek (2015-04-29).
@@ -58,13 +57,21 @@ public class SearchResultListItemView extends RelativeLayout {
         mAvatarSize = getResources().getDimensionPixelSize(R.dimen.material_list_item_avatar_size);
     }
 
-    public void setData(final Question question) {
-        mShowNameTextView.setText(question.getOwnerName());
-        mTitleTextView.setText(question.getTitle());
-        mAnswersTextView.setText(String.format(getResources().
-                getString(R.string.search_result_list_answer_count), question.getAnswerCount()));
+    public void setShowName(final String showName) {
+        mShowNameTextView.setText(showName);
+    }
 
-        final RequestCreator requestCreator = Picasso.with(getContext()).load(question.getOwnerAvatarUri())
+    public void setTitle(final String title) {
+        mTitleTextView.setText(title);
+    }
+
+    public void setAnswerCount(final int count) {
+        mAnswersTextView.setText(String.format(getResources().
+                getString(R.string.search_result_list_answer_count), count));
+    }
+
+    public void setAvatar(final String avatarUri) {
+        final RequestCreator requestCreator = Picasso.with(getContext()).load(avatarUri)
                 .placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar)
                 .resize(mAvatarSize, mAvatarSize).centerCrop();
 

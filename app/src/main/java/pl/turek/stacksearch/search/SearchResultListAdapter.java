@@ -67,7 +67,13 @@ public class SearchResultListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.search_result_list_item_view, parent, false);
         }
 
-        ((SearchResultListItemView) convertView).setData(getItem(position));
+        final Question question = getItem(position);
+
+        final SearchResultListItemView itemView = ((SearchResultListItemView) convertView);
+        itemView.setShowName(question.getOwnerName());
+        itemView.setTitle(question.getTitle());
+        itemView.setAnswerCount(question.getAnswerCount());
+        itemView.setAvatar(question.getOwnerAvatarUri());
 
         return convertView;
     }

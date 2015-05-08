@@ -99,7 +99,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
 
         if (savedInstanceState == null) {
             mSearchTaskRetainedFragment.search(mSearchPhrase, false);
-        } else {
+        } else if (SearchResultSwitcher.MODE_RESULT == mSearchResultSwitcher.getMode()) {
             showResult(mSearchTaskRetainedFragment.getSearchResponse());
         }
     }

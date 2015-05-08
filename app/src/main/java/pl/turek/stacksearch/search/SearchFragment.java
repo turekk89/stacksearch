@@ -20,6 +20,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import pl.turek.stacksearch.R;
+import pl.turek.stacksearch.net.StackSearchConnectivityManager;
 import pl.turek.stacksearch.net.event.NetworkAvailabilityChangedEvent;
 import pl.turek.stacksearch.ui.BaseFragment;
 import pl.turek.stacksearch.util.UIUtils;
@@ -28,9 +29,6 @@ import pl.turek.stacksearch.util.UIUtils;
  * @author Krzysztof Turek (2015-04-27).
  */
 public class SearchFragment extends BaseFragment {
-
-    private static final String KEY_SEARCH_BUTTON_ENABLED = "key_search_button_enabled";
-    private static final String KEY_SEARCH_QUERY_ENABLED = "key_search_query_enabled";
 
     @InjectView(R.id.search_button)
     Button mSearchButton;
@@ -50,12 +48,17 @@ public class SearchFragment extends BaseFragment {
         final View root = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.inject(this, root);
 
-        if (savedInstanceState != null) {
-            mSearchButton.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_BUTTON_ENABLED, true));
-            mSearchQueryEditText.setEnabled(savedInstanceState.getBoolean(KEY_SEARCH_QUERY_ENABLED, true));
-        }
-
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final StackSearchConnectivityManager cm = StackSearchConnectivityManager.getInstance(getActivity());
+        final boolean networkAvailable = cm.isNetworkAvailable();
+
+        setViewsEnabled(networkAvailable);
     }
 
     @Override
@@ -106,21 +109,10 @@ public class SearchFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (isVisible()) {
-            outState.putBoolean(KEY_SEARCH_BUTTON_ENABLED, mSearchButton.isEnabled());
-            outState.putBoolean(KEY_SEARCH_QUERY_ENABLED, mSearchQueryEditText.isEnabled());
-        }
-    }
-
     @SuppressWarnings("unused")
     public void onEventMainThread(final NetworkAvailabilityChangedEvent event) {
         final boolean enable = event.isNetworkAvailable();
-        mSearchButton.setEnabled(enable);
-        mSearchQueryEditText.setEnabled(enable);
+        setViewsEnabled(enable);
         if (enable) {
             UIUtils.showSoftKeyboard(getActivity(), mSearchQueryEditText);
         }
@@ -154,5 +146,10 @@ public class SearchFragment extends BaseFragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
+    }
+
+    private void setViewsEnabled(final boolean enabled) {
+        mSearchQueryEditText.setEnabled(enabled);
+        mSearchButton.setEnabled(enabled);
     }
 }

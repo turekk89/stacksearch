@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 
-import java.lang.ref.WeakReference;
-
 import pl.turek.stacksearch.search.client.SearchClient;
 import pl.turek.stacksearch.search.client.response.SearchResponse;
 import pl.turek.stacksearch.ui.BaseFragment;
@@ -19,8 +17,14 @@ public class SearchTaskRetainedFragment extends BaseFragment {
     public static final String FRAGMENT_TAG = SearchTaskRetainedFragment.class.getSimpleName();
 
     private SearchAsyncTask mSearchAsyncTask;
-    private WeakReference<SearchResultFragment> mSearchResultFragmentWeakReference;
     private SearchResponse mSearchResponse;
+    private Callback mCallback;
+
+    public interface Callback {
+        void onPreSearch(final boolean refresh);
+
+        void onPostSearch(final SearchResponse response);
+    }
 
     public SearchTaskRetainedFragment() {
         setRetainInstance(true);
@@ -35,10 +39,6 @@ public class SearchTaskRetainedFragment extends BaseFragment {
         return (SearchTaskRetainedFragment) fragmentManager.findFragmentByTag(SearchTaskRetainedFragment.FRAGMENT_TAG);
     }
 
-    public void attach(final SearchResultFragment fragment) {
-        mSearchResultFragmentWeakReference = new WeakReference<>(fragment);
-    }
-
     public void search(final String searchPhrase, final boolean refresh) {
         if (mSearchAsyncTask == null || AsyncTask.Status.FINISHED == mSearchAsyncTask.getStatus()) {
             mSearchAsyncTask = new SearchAsyncTask(refresh);
@@ -50,7 +50,12 @@ public class SearchTaskRetainedFragment extends BaseFragment {
         return mSearchResponse;
     }
 
-    final class SearchAsyncTask extends AsyncTask<String, Void, SearchResponse> {
+    public void setCallback(final Callback callback) {
+        mCallback = callback;
+    }
+
+
+    private final class SearchAsyncTask extends AsyncTask<String, Void, SearchResponse> {
 
         final boolean mRefresh;
 
@@ -60,9 +65,8 @@ public class SearchTaskRetainedFragment extends BaseFragment {
 
         @Override
         protected void onPreExecute() {
-            final SearchResultFragment fragment = mSearchResultFragmentWeakReference.get();
-            if (fragment != null && fragment.isAdded() && !mRefresh) {
-                fragment.showProgress();
+            if (mCallback != null) {
+                mCallback.onPreSearch(mRefresh);
             }
         }
 
@@ -77,9 +81,8 @@ public class SearchTaskRetainedFragment extends BaseFragment {
         protected void onPostExecute(SearchResponse searchResponse) {
             mSearchResponse = searchResponse;
 
-            final SearchResultFragment fragment = mSearchResultFragmentWeakReference.get();
-            if (fragment != null && fragment.isAdded()) {
-                fragment.showResult(searchResponse);
+            if (mCallback != null) {
+                mCallback.onPostSearch(searchResponse);
             }
         }
     }

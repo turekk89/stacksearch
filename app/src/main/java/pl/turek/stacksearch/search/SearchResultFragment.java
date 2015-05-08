@@ -27,7 +27,7 @@ import pl.turek.stacksearch.ui.BaseFragment;
  * @author Krzysztof Turek (2015-04-29).
  */
 public class SearchResultFragment extends BaseFragment implements AdapterView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, SearchTaskRetainedFragment.Callback {
 
     private static final String KEY_SEARCH_RESULT_SWITCHER_MODE = "key_search_result_switcher_mode";
 
@@ -92,7 +92,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mSearchTaskRetainedFragment = SearchTaskRetainedFragment.getInstance(activity);
-        mSearchTaskRetainedFragment.attach(this);
+        mSearchTaskRetainedFragment.setCallback(this);
 
         final Bundle args = getArguments();
         mSearchPhrase = args.getString(SearchActivity.EXTRA_SEARCH_PHRASE);
@@ -115,6 +115,7 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     public void onDestroyView() {
         super.onDestroyView();
 
+        mSearchTaskRetainedFragment.setCallback(null);
         ButterKnife.reset(this);
     }
 
@@ -154,5 +155,17 @@ public class SearchResultFragment extends BaseFragment implements AdapterView.On
     @Override
     public void onRefresh() {
         mSearchTaskRetainedFragment.search(mSearchPhrase, true);
+    }
+
+    @Override
+    public void onPreSearch(final boolean refresh) {
+        if (!refresh) {
+            showProgress();
+        }
+    }
+
+    @Override
+    public void onPostSearch(final SearchResponse response) {
+        showResult(response);
     }
 }

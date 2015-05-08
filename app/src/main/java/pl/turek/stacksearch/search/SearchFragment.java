@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -141,11 +140,7 @@ public class SearchFragment extends BaseFragment {
 
     private void showSearchResult(final String searchPhrase) {
         final SearchActivity searchActivity = (SearchActivity) getActivity();
-        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(searchActivity.getFragmentContainerId(), SearchResultFragment.newInstance(searchPhrase));
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
+        searchActivity.replaceFragment(SearchResultFragment.newInstance(searchPhrase));
     }
 
     private void setViewsEnabled(final boolean enabled) {

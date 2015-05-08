@@ -3,6 +3,7 @@ package pl.turek.stacksearch.search;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import pl.turek.stacksearch.ui.BaseContentActivity;
 import pl.turek.stacksearch.ui.BaseFragment;
@@ -11,11 +12,6 @@ import pl.turek.stacksearch.ui.BaseFragment;
 public class SearchActivity extends BaseContentActivity {
 
     public static final String EXTRA_SEARCH_PHRASE = "extra_search_phrase";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected BaseFragment onCreateFragment() {
@@ -29,6 +25,14 @@ public class SearchActivity extends BaseContentActivity {
             // from onCreateFragment() method
             createSearchTaskRetainedFragment();
         }
+    }
+
+    public void replaceFragment(final BaseFragment fragment) {
+        final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(getFragmentContainerId(), fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 
     private void createSearchTaskRetainedFragment() {

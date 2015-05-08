@@ -9,6 +9,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -35,16 +36,30 @@ public class SearchClient {
 
         final Request request = new Request.Builder().url(requestUrl).build();
         final Response response;
+        InputStream inputStream = null;
         SearchResponse searchResult = null;
         try {
             response = new OkHttpClient().newCall(request).execute();
+            inputStream = response.body().byteStream();
+            final Reader reader = new InputStreamReader(inputStream);
             final Gson gson = new Gson();
-            final Reader reader = new InputStreamReader(response.body().byteStream());
             searchResult = gson.fromJson(reader, SearchResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            quietClose(inputStream);
         }
         return searchResult;
+    }
+
+    private static void quietClose(final InputStream inputStream) {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static String buildRequestUrl(final String searchPhrase) {

@@ -128,7 +128,6 @@ public class SearchFragment extends BaseFragment {
             // https://code.google.com/p/android/issues/detail?id=22920 - bug
             // I see this first time in my life :D but I use emulator, I don't have mobile with
             // android 2.3.7 so I can't test it with real device
-
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(android.R.color.primary_text_light));
             final SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(errorMsg);
             spannableStringBuilder.setSpan(foregroundColorSpan, 0, errorMsg.length(), 0);

@@ -40,7 +40,6 @@ public class SearchResultListItemView extends RelativeLayout {
 
     public SearchResultListItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init();
     }
 
